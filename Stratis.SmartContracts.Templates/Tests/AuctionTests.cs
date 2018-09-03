@@ -89,7 +89,7 @@ namespace $safeprojectname$
 
             ((TestMessage)SmartContractState.Message).Value = 90;
 
-            Assert.ThrowsException<Exception>(() => auction.Bid());
+            Assert.ThrowsException<SmartContractAssertException>(() => auction.Bid());
         }
 
         [TestMethod]
