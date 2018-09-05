@@ -16,9 +16,17 @@ namespace $safeprojectname$
          * and will provide access to such tools when they're ready.
          */
 
-        private static readonly Address CoinbaseAddress = (Address)"mxKorCkWmtrPoekfWiMzERJPhaT13nnkMy";
-        private static readonly Address ContractOwnerAddress = (Address)"muXxezY249vn18Ho67qLnybEwzwp4t5Cwj";
-        private static readonly Address ContractAddress = (Address)"muQuwkjrhCC26mTRJW7BivGBNAdZt25M1E";
+        private static readonly Address CoinbaseAddress = (Address)"Sj2p6ZRHdLvywyi43HYoE4bu2TF1nvavjR";
+        private static readonly Address ContractOwnerAddress = (Address)"STpNXhJY6yrX4oh5LUeFbcBGxGCVxfV1ac";
+        private static readonly Address ContractAddress = (Address)"SkNHV22dsvWdVb6Mi8uSGRbA8q9YSpezbw";
+
+        private IList<Address> SampleAddresses = new List<Address> {
+            new Address("SeMvVcDKTLBrxVua5GXmdF8qBYTbJZt4NJ"),
+            new Address("Sipqve53hyjzTo2oU7PUozpT1XcmATnkTn"),
+            new Address("SXTtiQq2S4LrjWj2QMnpFfRJuzHGkfxuCE"),
+            new Address("STCutNQ1haZT472aYnuBYcqbyH7QiDMNox"),
+            new Address("ScBovGKDLrSyjRqJVGjXWLrdpTufWKFzne")
+        };
 
         private const ulong ContractDeployBlockNumber = 1;
         private const ulong Duration = 20u;
@@ -47,7 +55,8 @@ namespace $safeprojectname$
             };
             var getContractBalance = new Func<ulong>(() => BlockchainBalances[ContractAddress]);
             var persistentState = new TestPersistentState();
-            var internalTransactionExecutor = new TestInternalTransactionExecutor(BlockchainBalances, ContractAddress);
+
+            var internalTransactionExecutor = new TestInternalTransactionExecutor(BlockchainBalances, ContractAddress, SampleAddresses);
             var gasMeter = new TestGasMeter((Gas)GasLimit);
             var hashHelper = new TestInternalHashHelper();
 
@@ -60,6 +69,16 @@ namespace $safeprojectname$
                 getContractBalance,
                 hashHelper
             );
+        }
+
+        [TestMethod]
+        public void TestCreation()
+        {
+            var auctionManager = new AuctionManager(SmartContractState);
+
+            var createdAuctionAddress = auctionManager.CreateNewAuction(Duration);
+
+            Assert.IsNotNull(createdAuctionAddress);
         }
 
         [TestMethod]
@@ -89,7 +108,7 @@ namespace $safeprojectname$
 
             ((TestMessage)SmartContractState.Message).Value = 90;
 
-            Assert.ThrowsException<Exception>(() => auction.Bid());
+            Assert.ThrowsException<SmartContractAssertException>(() => auction.Bid());
         }
 
         [TestMethod]

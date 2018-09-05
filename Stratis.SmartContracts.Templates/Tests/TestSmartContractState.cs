@@ -36,14 +36,41 @@ namespace $safeprojectname$
 
     public class TestInternalTransactionExecutor : IInternalTransactionExecutor
     {
+        private readonly Func<Address> addressGenerator;
         public Dictionary<Address, ulong> ChainBalanceTracker;
         public Address ContractAddress;
+        private IList<Address> sampleAddresses;
 
-        public TestInternalTransactionExecutor(Dictionary<Address, ulong> chainBalanceTracker, Address contractAddress)
+        public TestInternalTransactionExecutor(Dictionary<Address, ulong> chainBalanceTracker, Address contractAddress, IList<Address> sampleAddresses)
         {
             this.ChainBalanceTracker = chainBalanceTracker;
             this.ContractAddress = contractAddress;
+            this.sampleAddresses = sampleAddresses;
+            var index = 0;
+
+            Func<Address> getNewAddress = () =>
+            {
+                if (index >= sampleAddresses.Count)
+                    index = 0;
+
+                return sampleAddresses[index++];
+            };
+
+            this.addressGenerator = getNewAddress;
         }
+
+        public ICreateResult Create<T>(ISmartContractState smartContractState, object[] parameters, ulong amountToTransfer)
+        {
+            var address = addressGenerator();
+            ChainBalanceTracker[address] = amountToTransfer;
+
+            return new TestCreateResult
+            {
+                Success = true,
+                NewContractAddress = address
+            };
+        }
+
         public ITransferResult TransferFunds(ISmartContractState smartContractState, Address addressTo, ulong amountToTransfer, TransferFundsToContract transferFundsToContractDetails)
         {
             ChainBalanceTracker[ContractAddress] = ChainBalanceTracker[ContractAddress] - amountToTransfer;
@@ -54,6 +81,13 @@ namespace $safeprojectname$
             };
             return fakeTransferResult;
         }
+    }
+
+    public class TestCreateResult : ICreateResult
+    {
+        public Address NewContractAddress { get; set; }
+
+        public bool Success { get; set; }
     }
 
     public class TestTransferResult : ITransferResult
