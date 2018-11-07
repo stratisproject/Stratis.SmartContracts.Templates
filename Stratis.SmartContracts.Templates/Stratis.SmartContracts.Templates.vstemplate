@@ -20,9 +20,6 @@
       <ProjectTemplateLink ProjectName="$safeprojectname$">
         Contract\Stratis.SmartContracts.Contract.vstemplate
       </ProjectTemplateLink>
-      <ProjectTemplateLink ProjectName="$safeprojectname$.Tests">
-        Tests\Stratis.SmartContracts.Tests.vstemplate
-      </ProjectTemplateLink>
     </ProjectCollection>
   </TemplateContent>
   <WizardExtension>
