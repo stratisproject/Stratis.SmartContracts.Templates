@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Stratis Group Ltd",
+  "classifications": [ "Common", "Console", "C#8" ],
+  "identity": "Stratis.SmartContracts.Templates.CLI",
+  "name": "Stratis Smart Contract Template",
+  "shortName": "smartcontract",
+  "sourceName": "Stratis.SmartContracts.Templates.CLI",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}

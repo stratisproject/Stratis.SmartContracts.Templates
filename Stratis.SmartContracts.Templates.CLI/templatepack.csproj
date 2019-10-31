@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Build">
+    <PackageType>Template</PackageType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <PackageVersion>1.0</PackageVersion>
+    <PackageId>Stratis.SmartContracts.Templates.CLI</PackageId>
+    <Title>Stratis Smart Contract Template</Title>
+    <Authors>Stratis Group Ltd</Authors>
+    <Description>Empty template for a Stratis smart contract.</Description>
+	<PackageProjectUrl>https://github.com/stratisproject/Stratis.SmartContracts.Templates</PackageProjectUrl>
+    <PackageTags>dotnet-new;templates;stratis;smart contract;</PackageTags>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+</Project>
